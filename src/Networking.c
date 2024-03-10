@@ -95,7 +95,7 @@ SERVER create_TCP_server(unsigned short port)
     return server;
 }
 
-void run_server(SERVER server)
+void run_server(SERVER server, void (*func)(ARGUMENTS args), ARGUMENTS args)
 {
     server.fd = create_socket(server.addr_fam, server.type);
     bind_to_port(server.fd, server.addr_fam, server.port);
@@ -105,16 +105,11 @@ void run_server(SERVER server)
     {
         sockaddr_in client_data;
         socket_d client_fd = accept_connection(server.fd, &client_data);
-        pid_t id = fork();
-        if(id == 0)
-        {
-            close(server.fd);
-            
-            
+        
+        args.client_data = client_data;
+        args.client_fd = client_fd;
+        func(args);
 
-            close(client_fd);
-            exit(EXIT_SUCCESS);
-        }
         close(client_fd);
     }
 }
