@@ -17,10 +17,9 @@ typedef struct{
 } SERVER;
 
 typedef struct{
-    sockaddr_in client_data;
-    socket_d client_fd;
-    void* args;
-} ARGUMENTS;
+    sockaddr_in data;
+    socket_d fd;
+} Client;
 
 socket_d create_socket(unsigned int addr_family, unsigned int type);
 
@@ -34,4 +33,4 @@ void connect_to_addr(socket_d fd, const char* ip_addr, unsigned short port, unsi
 
 SERVER create_TCP_server(unsigned short port);
 
-void run_server(SERVER server, void (*func)(ARGUMENTS), ARGUMENTS args);
+void run_server(SERVER server, void (*func)(Client));

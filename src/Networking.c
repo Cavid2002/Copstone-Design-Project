@@ -95,7 +95,7 @@ SERVER create_TCP_server(unsigned short port)
     return server;
 }
 
-void run_server(SERVER server, void (*func)(ARGUMENTS args), ARGUMENTS args)
+void run_server(SERVER server, void (*func)(Client))
 {
     server.fd = create_socket(server.addr_fam, server.type);
     bind_to_port(server.fd, server.addr_fam, server.port);
@@ -103,14 +103,12 @@ void run_server(SERVER server, void (*func)(ARGUMENTS args), ARGUMENTS args)
     fprintf(stdout, "[INFO]Server is listening on port: %d\n", server.port);
     while(true)
     {
-        sockaddr_in client_data;
-        socket_d client_fd = accept_connection(server.fd, &client_data);
+        Client cli;
+        cli.fd = accept_connection(server.fd, &cli.data);
         
-        args.client_data = client_data;
-        args.client_fd = client_fd;
-        func(args);
+        func(cli);
 
-        close(client_fd);
+        close(cli.fd);
     }
 }
 
