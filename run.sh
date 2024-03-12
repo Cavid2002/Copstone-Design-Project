@@ -3,5 +3,4 @@ cd src
 cd ..
 
 gcc main.c -o ./bin/main -L"./src/" -lNET 
-gcc client.c -o ./bin/client -L"./src/" -lNET 
-./bin/main
+gcc client.c -o ./bin/client -L"./src/" -lNET
